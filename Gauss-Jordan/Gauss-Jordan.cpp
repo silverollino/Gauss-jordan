@@ -11,6 +11,19 @@
 #include <vector>
 using namespace std;
 
+void mostrarMatriz(int tamano, vector < vector<double>>matriz ,vector<double>resMatriz)
+{
+	cout << "\nLa matriz quedo de la siguiente forma:\n";
+	for (int i = 0; i < tamano; i++)
+	{
+		cout << "|";
+		for (int j = 0; j < tamano; j++)
+		{
+			cout << setw(tamano) << setfill(' ') << matriz[i][j] << " ";
+		}
+		cout << "| = " << resMatriz[i] << endl;
+	}
+}
 
 void main() {
 	int tamano = 0;
@@ -57,7 +70,9 @@ void main() {
 
 	}
 
-	cout << "\nLa matriz quedo de la siguiente forma:\n";
+	mostrarMatriz(tamano, matriz, resMatriz);
+
+	/*cout << "\nLa matriz quedo de la siguiente forma:\n";
 	for (int i = 0; i < tamano; i++)
 	{
 		cout << "|";
@@ -66,7 +81,9 @@ void main() {
 			cout << setw(tamano) << setfill(' ') << matriz[i][j] << " ";
 		}
 		cout << "| = " << resMatriz[i] << endl;
-	}
+	}*/
+
+	//Verificar que la diagonal no tenga 0
 
 	//Division de Xnn para que se haga 1
 	matrizAux = matriz;
@@ -74,30 +91,40 @@ void main() {
 
 	double Xnn = 0;
 	double XnnAux = 0;
-	int rep = 0;
-
-	for (int k = 0; k < tamano; k++)
+	double numSlct = 0;
+	//Division para 1's
+	for (int i = 0; i < tamano; i++)
 	{
-		//Division para 1's
-		for (int i = rep; i < tamano; i++)
+		Xnn = matrizAux[i][i];
+
+		matrizAux[i][i] = matrizAux[i][i] / Xnn;
+		for (int j = 0; j < tamano; j++)
 		{
-			Xnn = matriz[i][i];
-			for (int j = 0; j < tamano; j++)
+			if (j != i)
 			{
 				matrizAux[i][j] = matrizAux[i][j] / Xnn;
-				resMatrizAux[i] = resMatrizAux[i] / Xnn;
-			}
-			rep++;
-			break;
+			}			
 		}
-
+		resMatrizAux[i] = resMatrizAux[i] / Xnn;
 		//Operacion para 0's
-		for (int j = 0; j < tamano-1; j++)
+		for (int k = 0; k < tamano; k++)
 		{
 			//Fila actual * el elejido de la columna + el actual de la columna
 			
+			if (k != i)
+			{
+				numSlct = matrizAux[k][i];				
+				for (int j = 0; j < tamano; j++)
+				{										
+						matrizAux[k][j] = matrizAux[i][j] * (numSlct * -1) + matrizAux[k][j];						
+						mostrarMatriz(tamano, matrizAux, resMatrizAux);					
+				}
+				resMatrizAux[k] = resMatrizAux[i] * (numSlct * -1) + resMatrizAux[k];
+
+			}
 		}
 	}
+	resultados = resMatrizAux;
 
 
 	cout << "\nLos valores de las incognitas son:\n";
